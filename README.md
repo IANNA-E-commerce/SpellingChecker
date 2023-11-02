@@ -1,2 +1,2 @@
-# SpeelingChecker
-I am trying to create a speeling checker
+# SpellingChecker
+I am trying to create a spelling checker
