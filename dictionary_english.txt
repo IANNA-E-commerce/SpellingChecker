@@ -12,6 +12,7 @@
    reducrer:reducer
    painti:paint
    pait:paint
+   pain:paint
    painted:paint
    pump:pumps
    pumpt:pump
@@ -111,6 +112,7 @@
    wegg:weg
    wweg:weg
    weeg:weg
+   weg:weg
    ueg:weg
    veg:weg
    wegi:weg
