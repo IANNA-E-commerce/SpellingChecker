@@ -126,5 +126,5 @@ def custom_spell_check(text):
     return corrected_text
 
 
-input_text = "motorengyne"
+input_text = "yo soy hermano"
 custom_spell_check(input_text)
