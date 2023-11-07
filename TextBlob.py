@@ -25,7 +25,6 @@ def find_errors(text):
     # Find the wrong words
     spell = SpellChecker()
     misspelled = spell.unknown(text)
-    print("wrong_words", misspelled)
     return misspelled
 
 
@@ -33,12 +32,12 @@ def separate_word(word, index):
     return [word[:index], word[index:]]
 
 
-def correcao_personalizada(word):
+def return_custom_corrections(word):
     if word in custom_corrections:
         return custom_corrections[word]
 
 
-def correcao_padrao(word):
+def return_textblob_correction(word):
     if len(find_errors([word])) == 0:
         return word
     corrected_word = TextBlob(word).correct()
@@ -47,8 +46,7 @@ def correcao_padrao(word):
     # return False
 
 
-def descobrir_palavras(word):
-    print(word)
+def find_words(word):
     for index in range(len(word)):
         separate_words = separate_word(word, (index + 1))
         if len(find_errors(separate_words)) == 0:
@@ -57,24 +55,23 @@ def descobrir_palavras(word):
             return True
     for index in range(len(word)):
         separate_words = separate_word(word, (index + 1))
-        print("Palavras corrigidas ", separate_words)
-        if correcao_personalizada(separate_words[0]):
-            if correcao_personalizada(separate_words[1]):
-                corrected_words.append(correcao_personalizada(separate_words[0]))
-                corrected_words.append(correcao_personalizada(separate_words[1]))
+        if return_custom_corrections(separate_words[0]):
+            if return_custom_corrections(separate_words[1]):
+                corrected_words.append(return_custom_corrections(separate_words[0]))
+                corrected_words.append(return_custom_corrections(separate_words[1]))
                 return True
-            elif correcao_padrao(separate_words[1]):
-                corrected_words.append(correcao_personalizada(separate_words[0]))
-                corrected_words.append(correcao_padrao(separate_words[1]))
+            elif return_textblob_correction(separate_words[1]):
+                corrected_words.append(return_custom_corrections(separate_words[0]))
+                corrected_words.append(return_textblob_correction(separate_words[1]))
                 return True
-        elif correcao_padrao(separate_words[0]):
-            if correcao_personalizada(separate_words[1]):
-                corrected_words.append(correcao_padrao(separate_words[0]))
-                corrected_words.append(correcao_personalizada(separate_words[1]))
+        elif return_textblob_correction(separate_words[0]):
+            if return_custom_corrections(separate_words[1]):
+                corrected_words.append(return_textblob_correction(separate_words[0]))
+                corrected_words.append(return_custom_corrections(separate_words[1]))
                 return True
-            elif correcao_padrao(separate_words[1]):
-                corrected_words.append(correcao_padrao(separate_words[0]))
-                corrected_words.append(correcao_padrao(separate_words[1]))
+            elif return_textblob_correction(separate_words[1]):
+                corrected_words.append(return_textblob_correction(separate_words[0]))
+                corrected_words.append(return_textblob_correction(separate_words[1]))
                 return True
     return False
 
@@ -85,26 +82,23 @@ def verification_correction(text):
     wrong_words = find_errors(array)
 
     if index_word == -1:
-        print("verif")
         return corrected_words
 
     # Give preference for words in our dictionary
     for word in array:
-        print("word", word)
         if word in wrong_words:
             # Verifica se a palavra está no dicionário de correções personalizadas
-            if not correcao_personalizada(word):
+            if not return_custom_corrections(word):
                 # Use o TextBlob para correção padrão
-                if not correcao_padrao(word):
-                    if not descobrir_palavras(word):
+                if not return_textblob_correction(word):
+                    if not find_words(word):
                         print("Não descobriu uma palavra")
                 else:
-                    corrected_words.append(correcao_padrao(word))
+                    corrected_words.append(return_textblob_correction(word))
             else:
-                corrected_words.append(correcao_personalizada(word))
+                corrected_words.append(return_custom_corrections(word))
         else:
             corrected_words.append(word)
-            # logic_ver_true()
 
 
 def custom_spell_check(text):
@@ -112,7 +106,6 @@ def custom_spell_check(text):
     verification_correction(text)
 
     corrected_text = ""
-    print("corrected_words = ", corrected_words)
     if corrected_words is not None:
         for word in corrected_words:
             if isinstance(word, TextBlob):
