@@ -2,12 +2,25 @@ import enchant
 from unidecode import unidecode
 import re
 
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
 enchant_dict = None
 chosen_language = ""
 custom_corrections_file = ""
 custom_corrections = {}
 index_word = 1
 corrected_words = []
+
+@app.route('/spellChecker', methods=['GET'])
+def spellChecker():
+    query = request.args.get('query')
+    resultados = custom_spell_check(query)
+    return jsonify(resultados)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 # Change the program for each language chosen
@@ -148,4 +161,3 @@ def custom_spell_check(array_info):
 
 input_info = ["yo soi tu Hemna", "es_MX"]
 custom_spell_check(input_info)
-
