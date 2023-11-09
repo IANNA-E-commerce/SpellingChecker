@@ -146,6 +146,6 @@ def custom_spell_check(array_info):
     return corrected_text
 
 
-input_info = ["yo soi tu Hemna", "es_MX"]
+input_info = ["eu sou rose", "pt_BR"]
 custom_spell_check(input_info)
 
